@@ -24,10 +24,10 @@ use Test::Easy qw(deep_ok);
 #    my @one_to_ten = splice 'b'..'f', 0, 0, 'a';
 {
   local $. = 0; # the following splice() causes a bogus uninitialized-$. warning
-  my $splice_error = do { local $@; eval { () = splice 2..10, 0, 0, 10 }; $@ };
-  my $leach_error  = do { local $@; eval { () = leach 1..2 }; $@ };
-  like( $splice_error, qr/ARRAY ref/, 'got some error about array references to splice' );
-  like( $leach_error, qr/ARRAY ref/, 'got some error about array references to leach' );
+  my $splice_error = do { local $@; eval q{ () = splice 2..10, 0, 0, 10 }; $@ };
+  my $leach_error  = do { local $@; eval q{ () = leach 1..2 }; $@ };
+  like( $splice_error, qr/(?:must be array|ARRAY ref)/, 'got some error about array references to splice' );
+  like( $leach_error, qr/(?:must be array|ARRAY ref)/, 'got some error about array references to leach' );
 }
 
 {

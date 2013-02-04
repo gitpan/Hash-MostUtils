@@ -12,6 +12,7 @@ use Test::Easy qw(deep_ok);
 
 # sample code from the pod
 subtest pieces_of_8 => sub {
+	plan tests => 2;
   my @sets =
     n_map   6, sub { [$::a, $::b, $::c, $::d, $::e, $::f] },
     n_apply 3, sub { $_ *= 3 for $::a, $::b, $::c },

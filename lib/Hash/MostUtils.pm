@@ -6,7 +6,7 @@ use base qw(Exporter);
 use Carp qw(confess);
 use Hash::MostUtils::leach qw(n_each leach);
 
-our $VERSION = 1.01;
+our $VERSION = 1.02;
 
 our @EXPORT_OK = qw(
   lvalues

@@ -24,8 +24,14 @@ sub import {
     no strict 'refs';
     no warnings 'redefine';
     my %exportable = map { $_ => 1 } @EXPORT_OK;
+		my %except = (
+			subtest => {
+				'5.012005' => 1,
+			},
+		);
     foreach (@EXPORT, grep { $exportable{$_} } @_) {
-      *{"$caller\::$_"} =*{$_}{CODE};
+      next if $except{$_}{$]};
+      *{"$caller\::$_"} = *{$_}{CODE};
     }
   }
 }
