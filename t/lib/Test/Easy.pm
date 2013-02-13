@@ -24,11 +24,11 @@ sub import {
     no strict 'refs';
     no warnings 'redefine';
     my %exportable = map { $_ => 1 } @EXPORT_OK;
-		my %except = (
-			subtest => {
-				'5.012005' => 1,
-			},
-		);
+    my %except = (
+      subtest => {
+        '5.012005' => 1,
+      },
+    );
     foreach (@EXPORT, grep { $exportable{$_} } @_) {
       next if $except{$_}{$]};
       *{"$caller\::$_"} = *{$_}{CODE};
@@ -53,7 +53,7 @@ sub deep_ok {
       my $name = shift;
       my $test = pop;
       my $caller = caller;
-      Test::More::diag <<UH_OH unless $subtest_warning_already_shown{$caller}++;
+      Test::More::diag(<<UH_OH) unless $subtest_warning_already_shown{$caller}++;
 
 Uh-oh, it looks like the test you're running uses
 'subtest', but your version of Test::More doesn't actually
@@ -61,11 +61,46 @@ support subtest. I'm faking out a 'subtest' for you.
 Please just make sure the tests pass - don't worry about
 failures that are solely related to test counts.
 UH_OH
-      Test::More::diag <<RUNNING;
+      Test::More::diag(<<RUNNING);
 
 Running $name...
 RUNNING
-      local *{"$caller\::plan"} = sub {};
+      local *{"$caller\::plan"} = sub {
+        my $num = pop;
+        my $tb = Test::More->builder;
+
+        if ($tb->{Have_Plan}) {
+          require Carp;
+          Carp::confess(<<DAMNIT_JIM_IM_A_DOCTOR_NOT_A_BOLOGNA_SANDWICH_WHO_PUTS_KALE_ON_THEIR_BOLOGNA_SANDWICH_ANYWAY_NOW_PLEASE_TAKE_THAT_OFF_MY_HEAD);
+Dang. You've tried to use 'subtest()' in a test, which is totally cool,
+even on this old version of Test::More $Test::More::VERSION, which
+doesn't really implement a subtest()... except it's not cool, because
+you already planned your tests, and this shim needs to fake out the
+plan a bit in order to convince the test harness that all is well.
+And unfortunately the plan's already been written out: there's no
+nice way for me to recover it.
+
+You can either:
+
+(a) stop using subtest();
+(b) change your useline for Test::More from something like this:
+
+    use Test::More tests => $tb->{Expected_Tests};
+
+to something more like this:
+
+    use Test::More; END { done_testing() }
+
+Yeah, I'm not a fan of done_testing() either, but those are your choices.
+
+DAMNIT_JIM_IM_A_DOCTOR_NOT_A_BOLOGNA_SANDWICH_WHO_PUTS_KALE_ON_THEIR_BOLOGNA_SANDWICH_ANYWAY_NOW_PLEASE_TAKE_THAT_OFF_MY_HEAD
+        }
+
+        if (!$tb->{'Test::Easy::tampered'}++) {
+          $tb->{Expected_Tests} = 0;
+        }
+        $tb->{Expected_Tests} += $num;
+      };
       $test->();
     }
   }

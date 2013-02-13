@@ -31,7 +31,9 @@
          }
       },
       "runtime" : {
-         "requires" : {}
+         "requires" : {
+            "provide" : "0.01"
+         }
       }
    },
    "release_status" : "stable",
@@ -40,5 +42,5 @@
          "web" : "https://github.com/belden/perl-hash-mostutils/issues"
       }
    },
-   "version" : "1.02"
+   "version" : "1.03"
 }

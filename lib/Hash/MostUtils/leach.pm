@@ -1,19 +1,11 @@
 use strict;
 use warnings;
 package Hash::MostUtils::leach;
-use base qw(Exporter);
 
-BEGIN {
-  if ($] >= 5.013) {
-    require Hash::MostUtils::leach::v5_13;
-    Hash::MostUtils::leach::v5_13->import;
-  } else {
-    require Hash::MostUtils::leach::v5_08;
-    Hash::MostUtils::leach::v5_08->import;
-  }
-}
-
-our @EXPORT = qw(leach n_each);
+use provide (
+  if => ge => 5.013 => 'Hash::MostUtils::leach::v5_13',
+  else              => 'Hash::MostUtils::leach::v5_08',
+);
 
 {
   my %end;

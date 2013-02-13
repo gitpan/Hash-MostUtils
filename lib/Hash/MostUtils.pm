@@ -6,7 +6,7 @@ use base qw(Exporter);
 use Carp qw(confess);
 use Hash::MostUtils::leach qw(n_each leach);
 
-our $VERSION = 1.02;
+our $VERSION = 1.03;
 
 our @EXPORT_OK = qw(
   lvalues
@@ -21,6 +21,9 @@ our @EXPORT_OK = qw(
   n_map
   n_grep
   n_apply
+  reindex
+  rekey
+  revalue
 );
 
 # decrementing $| flips it between 0 and 1
@@ -124,6 +127,22 @@ sub hash_slice_of {
 sub hash_slice_by {
   my ($obj, @methods) = @_;
   return map { ($_ => scalar($obj->$_)) } @methods;
+}
+
+sub rekey (&@) {
+  my %map = shift()->();
+  return n_map 2, sub { $map{$a} || $a => $b }, @_;
+}
+
+sub reindex (&@) {
+  my %map = shift()->();
+  @_[values %map] = delete @_[keys %map];
+  return @_;
+}
+
+sub revalue (&@) {
+  my %map = shift()->();
+  return n_map 2, sub { $a => $map{$b} || $b }, @_;
 }
 
 1;
@@ -554,6 +573,46 @@ If a method in LIST can not be performed on OBJECT, you will get the standard
 
 Note that you may not use C<hash_slice_by> to pass arguments to the methods given
 in LIST. Note too that your methods are invoked in scalar context.
+
+=head2 rekey BLOCK HASH
+
+Rename the keys in HASH by the mapping table provided by BLOCK. HASH may be a real
+hash, or it may be an array that you are treating like a key/value store.
+
+    my %hash = (crow => 'black', snow => 'white', libro => 'read all over');
+    my %spanish = rekey { crow => 'corvino', snow => 'nieve' } %hash;
+
+    __END__
+    %spanish = (
+        corvino => 'black',
+        nieve   => 'white',
+        libro   => 'read all over',
+    );
+
+=head2 revalue BLOCK HASH
+
+Rename the values in HASH to the mapping table provided by BLOCK. HASH may be a real
+hash, or it may be an array that you are treating like a key/value store.
+
+    my @start = (apple => 'red', apple => 'green');
+    my @translated = revalue { red => 'rojo', green => 'verde' } @start;
+
+    __END__
+    @translated = (
+        apple => 'rojo',
+        apple => 'verde',
+    );
+
+=head2 reindex BLOCK LIST
+
+Reorder the values in LIST by the mapping table provided by BLOCK. LIST may be
+either an array or a list. In general this function will not work on hashes.
+
+    my @array = (1..5);
+    my @reindexed = reindex { map { $_ => $_ + 1 } 0..$#array } @array;
+
+    __END__
+    @reindexed = (undef, 1..5);
 
 =head1 ACKNOWLEDGEMENTS
 
