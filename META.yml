@@ -18,7 +18,9 @@ no_index:
     - t
     - inc
 requires:
-  provide: 0.01
+  provide: 0.02
 resources:
   bugtracker: https://github.com/belden/perl-hash-mostutils/issues
-version: 1.03
+  homepage: https://github.com/belden/perl-hash-mostutils
+  repository: git://github.com/belden/perl-hash-mostutils.git
+version: 1.04

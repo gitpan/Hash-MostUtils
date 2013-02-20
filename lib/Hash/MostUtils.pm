@@ -6,7 +6,7 @@ use base qw(Exporter);
 use Carp qw(confess);
 use Hash::MostUtils::leach qw(n_each leach);
 
-our $VERSION = 1.03;
+our $VERSION = 1.04;
 
 our @EXPORT_OK = qw(
   lvalues
@@ -210,10 +210,11 @@ an approximation of the same functionality for lists.
 The "values" of a list are the odd-positioned items. Note that in the case of an C<E<gt>empty slotE<lt>>
 in a sparse array, the value will be C<undef>.
 
-=head2 leach ARRAY
+=head2 leach [ ARRAY | HASH | ARRAYREF | HASHREF ]
 
-Iterate over ARRAY, returning successive "key/value" pairs. This behaves functionally identically to Perl's
-built-in C<each> keyword; however, it operates on arrays.
+Iterate over an ARRAY, HASH, ARRAYREF, or HASHREF, returning successive "key/value" pairs. This behaves
+functionally identically to Perl's built-in C<each> keyword; however, it is useful for arrays and array-
+and hash-references. This function handles objects which are built around blessed array- and hash-references.
 
     my @array = (1..4);
 
@@ -231,8 +232,9 @@ built-in C<each> keyword; however, it operates on arrays.
     3
     4
 
-Using C<leach> to gather key/value pairs from an array is guaranteed to be non-destructive to that array,
-whereas using C<splice> has the possibly unintended side effect of destroying the array:
+Using C<leach> to gather key/value pairs from a collection is guaranteed to be non-destructive to that
+collection. One pattern that's useful for iterating arrays and arrary references in pairs is to use C<splice>,
+which has the possibly unintended side effect of destroying the subject collection:
 
     my @array = (1..4);
 
@@ -245,7 +247,6 @@ whereas using C<splice> has the possibly unintended side effect of destroying th
     __END__
     1 => 2
     3 => 4
-
 
 Note the distinction between saying that this function is
 

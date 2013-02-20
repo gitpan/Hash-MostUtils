@@ -13,11 +13,13 @@ WriteMakefile(
     # I wrote provide.pm in the context of solving the leach() problem
     # that this module has to deal with; it would be the height of
     # jerkiness *towards myself* to not use provide.pm.
-    provide => '0.01',
+    provide => '0.02',
   },
   META_MERGE => {
     resources => {
       bugtracker => 'https://github.com/belden/perl-hash-mostutils/issues',
+      repository => 'git://github.com/belden/perl-hash-mostutils.git',
+      homepage => 'https://github.com/belden/perl-hash-mostutils',
     },
   },
   dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },

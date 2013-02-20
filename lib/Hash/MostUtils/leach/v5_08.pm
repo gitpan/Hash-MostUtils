@@ -7,7 +7,7 @@ our @EXPORT = qw(leach n_each);
 
 require Hash::MostUtils::leach;
 
-sub n_each($\@) { goto &Hash::MostUtils::leach::_n_each }
-sub leach(\@)   { unshift @_, 2; goto &n_each }
+sub n_each($\[@%$]) { goto &Hash::MostUtils::leach::_n_each }
+sub leach(\[@%$])   { unshift @_, 2; goto &n_each }
 
 1;

@@ -3,9 +3,12 @@ use warnings;
 package Hash::MostUtils::leach;
 
 use provide (
-  if => ge => 5.013 => 'Hash::MostUtils::leach::v5_13',
-  else              => 'Hash::MostUtils::leach::v5_08',
+  if    => ge => 5.013 => 'Hash::MostUtils::leach::v5_13',
+  elsif => ge => 5.010 => 'Hash::MostUtils::leach::v5_10',
+  else                 => 'Hash::MostUtils::leach::v5_08',
 );
+
+use Scalar::Util qw(refaddr);
 
 {
   my %end;
@@ -15,9 +18,16 @@ use provide (
     my $n = shift;
     my $data = shift;
 
-    my $ident = "$data";
+    my $ident = refaddr($data);
 
-    return () if $#{$data} < ($end{$ident} || 0);
+    # does it look hashlike? cast to an array ref for indexing.
+    $data = [ %$data ] if
+      do { local $@; eval { scalar keys %$data; 1 } };
+
+    if ($#{$data} < ($end{$ident} || 0)) {
+      delete $end{$ident};
+      return ();
+    }
 
     $end{$ident} += $n;
     return @{$data}[$end{$ident} - $n .. $end{$ident} - 1];

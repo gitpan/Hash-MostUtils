@@ -18,5 +18,6 @@ t/hash.t
 t/once.t
 t/array.t
 LICENSE
+lib/Hash/MostUtils/leach/v5_10.pm
 META.yml                                 Module YAML meta-data (added by MakeMaker)
 META.json                                Module JSON meta-data (added by MakeMaker)
