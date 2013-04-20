@@ -4,8 +4,7 @@ package Hash::MostUtils::leach;
 
 use provide (
   if    => ge => 5.013 => 'Hash::MostUtils::leach::v5_13',
-  elsif => ge => 5.010 => 'Hash::MostUtils::leach::v5_10',
-  else                 => 'Hash::MostUtils::leach::v5_08',
+  else                 => 'Hash::MostUtils::leach::v5_10',
 );
 
 use Scalar::Util qw(refaddr);

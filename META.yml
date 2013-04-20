@@ -23,4 +23,4 @@ resources:
   bugtracker: https://github.com/belden/perl-hash-mostutils/issues
   homepage: https://github.com/belden/perl-hash-mostutils
   repository: git://github.com/belden/perl-hash-mostutils.git
-version: 1.04
+version: 1.05

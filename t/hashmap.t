@@ -6,7 +6,8 @@ no warnings 'once';
 
 use Test::More tests => 4;
 
-use lib grep { -d } qw(../lib ./lib ./t/lib);
+use FindBin qw($Bin);
+use lib grep { -d } map { "$Bin/$_" } qw(../lib ./lib ./t/lib);
 use Hash::MostUtils qw(hashmap n_map);
 
 # hashmap

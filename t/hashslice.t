@@ -5,7 +5,8 @@ use warnings;
 
 use Test::More tests => 4;
 
-use lib grep { -d } qw(../lib ./lib ./t/lib);
+use FindBin qw($Bin);
+use lib grep { -d } map { "$Bin/$_" } qw(../lib ./lib ./t/lib);
 use Hash::MostUtils qw(hash_slice_of hash_slice_by);
 
 {

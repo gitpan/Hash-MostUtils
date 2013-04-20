@@ -5,7 +5,8 @@ use warnings;
 
 use Test::More tests => 2;
 
-use lib grep { -d } qw(../lib ./lib ./t/lib);
+use FindBin qw($Bin);
+use lib grep { -d } map { "$Bin/$_" } qw(../lib ./lib ./t/lib);
 use Hash::MostUtils qw(lvalues lkeys);
 
 # perl's built-in values() function only operates on hashes. lvalues() acts like values(), but for lists.
